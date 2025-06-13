@@ -1,14 +1,25 @@
+import requests
+
 def main():
-    data = [
+    word = "baby"
+    url = f"https://api.datamuse.com/words?rel_jjb={word}"
 
-            # TODO: Add JSON data here
- ]
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise error if request fails
 
-    list = []
-    # TODO: Iterate over the data and extract the adjectives for the word and store them in the list variable
+        data = response.json()
 
-    # TODO: Print the list variable, Example of print: Adjectives for the word "word" are: [list of adjectives]
-    print()
+        # Extract adjectives (up to 15 for readability)
+        adjectives = [item["word"] for item in data[:15]]  
+
+        if adjectives:
+            print(f'Adjectives for the word "{word}": {", ".join(adjectives)}')
+        else:
+            print(f'No adjectives found for "{word}".')
+
+    except requests.RequestException as e:
+        print("Error fetching data:", e)
 
 if __name__ == '__main__':
     main()
